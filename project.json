@@ -1,12 +1,11 @@
-{
+
     "slug": "meteo",
     "title": "METEO",
     "type": "Weather App",
-    "kicker": "Realtime Forecast",
+    "category": "Realtime Forecast",
     "summary": "Real-time weather app built with Next.js 14, TypeScript, and shadcn/ui for current conditions, 7-day forecasts, and interactive map insights.",
     "overview": "METEO is a weather experience focused on speed and clarity. It combines live current weather, multi-day forecasting, and map-based context in a single responsive interface so users can quickly understand local conditions and upcoming changes.",
     "year": "2026",
-    "stat": "Next.js 14",
     "spotlight": true,
     "thumbnail": "./public/preview.png",
     "spotlightImage": "./public/preview-hero.png",
@@ -45,10 +44,6 @@
     ],
     "actions": {
         "open": "https://meteo.ae1.tech",
-        "github": "https://github.com/ALXP-DANIEL/METEO",
-        "custom": {
-            "href": "/projects/meteo",
-            "label": "Case Study"
-        }
+        "github": "https://github.com/ALXP-DANIEL/METEO"
     }
 }
