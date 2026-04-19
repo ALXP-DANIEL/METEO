@@ -1,32 +1,34 @@
 {
-  "slug": "my-project-slug",
-  "title": "My Project",
-  "type": "SaaS",
-  "kicker": "Featured Build",
-  "summary": "Short summary",
-  "overview": "Longer project overview",
+  "slug": "meteo",
+  "title": "METEO",
+  "type": "Weather App",
+  "kicker": "Realtime Forecast",
+  "summary": "Real-time weather app built with Next.js 14, TypeScript, and shadcn/ui for current conditions, 7-day forecasts, and map-based insights.",
+  "overview": "METEO is a weather experience focused on speed and clarity. It combines live weather conditions, multi-day forecasting, and an interactive weather map into a single interface so users can quickly understand local conditions and upcoming changes.",
   "year": "2026",
-  "stat": "99 Lighthouse",
-  "featured": true,
-  "techStack": ["Next.js", "TypeScript", "Tailwind CSS"],
+  "stat": "Next.js 14",
+  "spotlight": true,
+  "techStack": [
+    "Next.js",
+    "TypeScript",
+    "shadcn/ui",
+    "Tailwind CSS",
+    "Mapbox GL",
+    "Zod"
+  ],
   "highlights": [
-    "Highlight one",
-    "Highlight two"
+    "Current weather conditions with quick visual context.",
+    "7-day forecast flow for planning ahead.",
+    "Interactive map with weather-related data layers."
   ],
   "previewImages": [
-    "./screenshots/hero.png",
-    {
-      "src": "./screenshots/dashboard.png",
-      "alt": "Dashboard",
-      "title": "Dashboard",
-      "caption": "Main dashboard view"
-    }
+    "./public/preview.png"
   ],
   "actions": {
-    "open": "https://example.com",
-    "github": "https://github.com/owner/repo",
+    "open": "https://meteo.ae1.tech",
+    "github": "https://github.com/ALXP-DANIEL/METEO",
     "custom": {
-      "href": "/projects/my-project-slug",
+      "href": "/projects/meteo",
       "label": "Case Study"
     }
   }
