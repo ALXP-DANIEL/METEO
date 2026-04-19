@@ -1,0 +1,33 @@
+{
+  "slug": "my-project-slug",
+  "title": "My Project",
+  "type": "SaaS",
+  "kicker": "Featured Build",
+  "summary": "Short summary",
+  "overview": "Longer project overview",
+  "year": "2026",
+  "stat": "99 Lighthouse",
+  "featured": true,
+  "techStack": ["Next.js", "TypeScript", "Tailwind CSS"],
+  "highlights": [
+    "Highlight one",
+    "Highlight two"
+  ],
+  "previewImages": [
+    "./screenshots/hero.png",
+    {
+      "src": "./screenshots/dashboard.png",
+      "alt": "Dashboard",
+      "title": "Dashboard",
+      "caption": "Main dashboard view"
+    }
+  ],
+  "actions": {
+    "open": "https://example.com",
+    "github": "https://github.com/owner/repo",
+    "custom": {
+      "href": "/projects/my-project-slug",
+      "label": "Case Study"
+    }
+  }
+}
