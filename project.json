@@ -8,7 +8,7 @@
     "year": "2026",
     "spotlight": true,
     "thumbnail": "./public/preview.png",
-    "spotlightImage": "./public/preview-hero.png",
+    "spotlightImage": "./public/spotlight.png",
     "techStack": [
         "Next.js",
         "TypeScript",
@@ -24,22 +24,22 @@
     ],
     "previewImages": [
         {
-            "src": "https://i.pinimg.com/originals/f8/ba/9b/f8ba9b7f92fa91361e251c72e213c11a.gif",
-            "title": "Workspace Home",
-            "caption": "Recent notes, pinned workspaces, and active tasks in one view.",
-            "alt": "Orbit Notes workspace home"
+            "src": "./public/preview.png",
+            "title": "Current Conditions",
+            "caption": "Live current weather with a quick-glance visual summary.",
+            "alt": "METEO current weather overview"
         },
         {
-            "src": "https://i.pinimg.com/originals/3a/a4/6f/3aa46f5701fc6ed92234ea0a9f86e2cd.gif",
-            "title": "Connected Notes",
-            "caption": "Linked references and lightweight task context beside the editor.",
-            "alt": "Orbit Notes connected editor"
+            "src": "./public/spotlight.png",
+            "title": "Forecast & Map",
+            "caption": "7-day forecast alongside interactive weather map layers.",
+            "alt": "METEO forecast and map view"
         },
         {
-            "src": "https://i.pinimg.com/736x/64/20/b5/6420b5ba0dd45dc35aae9705c8e275dd.jpg",
-            "title": "Project Context",
-            "caption": "Shared timelines and decisions mapped back to related notes.",
-            "alt": "Orbit Notes project context dashboard"
+            "src": "./public/backdrop.png",
+            "title": "Interface",
+            "caption": "Responsive layout across the forecast and map views.",
+            "alt": "METEO interface backdrop"
         }
     ],
     "actions": {
