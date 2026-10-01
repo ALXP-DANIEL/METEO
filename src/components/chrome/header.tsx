@@ -1,5 +1,6 @@
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import Mark from "./mark";
 import { ThemeToggle } from "./theme";
 
 const iconButton =
@@ -13,14 +14,8 @@ export default function Header() {
         href="/"
         className="surface flex items-center gap-3 rounded-2xl py-2.5 pr-4 pl-2.5"
       >
-        <span className="grid size-9 place-items-center rounded-xl bg-foreground">
-          <img
-            src="/icons/wx/partly-cloudy-day.svg"
-            alt=""
-            width={32}
-            height={32}
-            className="size-8"
-          />
+        <span className="grid size-9 place-items-center rounded-xl bg-foreground text-background">
+          <Mark className="size-6" />
         </span>
         <span className="flex flex-col">
           <span className="font-mono text-sm leading-tight font-semibold">

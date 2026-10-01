@@ -113,7 +113,7 @@ export default async function Home({
           key={`${place.lat},${place.lon},${units}`}
           className="grid gap-4 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-6"
         >
-          <div className="flex flex-col gap-4 max-lg:contents lg:sticky lg:top-6 lg:row-span-2 lg:self-start">
+          <div className="flex flex-col gap-4 max-lg:contents lg:sticky lg:top-6 lg:row-span-3 lg:self-start">
             <div className="animate-rise px-1 py-4 lg:py-8">
               <Hero forecast={forecast} />
             </div>
@@ -131,7 +131,7 @@ export default async function Home({
           </div>
 
           <div
-            className="grid grid-cols-2 gap-4 self-start max-lg:order-4 md:grid-cols-4 lg:col-start-2"
+            className="grid auto-rows-[11.5rem] grid-cols-2 gap-4 self-start max-lg:order-4 md:grid-cols-4 lg:col-start-2"
             data-stagger
           >
             <WindTile forecast={forecast} />
@@ -144,6 +144,9 @@ export default async function Home({
             <VisibilityTile forecast={forecast} />
             <PressureTile forecast={forecast} />
             <MoonTile forecast={forecast} />
+          </div>
+
+          <div className="max-lg:order-5 lg:col-start-2">
             <Radar lat={place.lat} lon={place.lon} />
           </div>
         </main>
