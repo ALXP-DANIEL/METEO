@@ -1,3 +1,4 @@
+import CountUp from "@/components/chrome/count-up";
 import { longDate, round, unitLabels } from "@/lib/format";
 import type { Forecast } from "@/lib/weather";
 import { condition, iconFor } from "@/lib/wmo";
@@ -21,7 +22,7 @@ export default function Hero({ forecast }: { forecast: Forecast }) {
 
       <div className="mt-3 flex items-center">
         <p className="font-mono text-[clamp(5.5rem,20vw,8.5rem)] leading-[0.85] font-semibold tracking-tighter tabular-nums">
-          {round(current.temperature)}°
+          <CountUp value={round(current.temperature)} />°
         </p>
         <img
           src={iconFor(current.code, current.isDay)}

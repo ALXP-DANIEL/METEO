@@ -106,36 +106,182 @@
 
 [data-stagger] > * {
   animation: var(--animate-rise);
+  animation-delay: var(--intro);
 }
 [data-stagger] > *:nth-child(2) {
-  animation-delay: 50ms;
+  animation-delay: calc(var(--intro) + 50ms);
 }
 [data-stagger] > *:nth-child(3) {
-  animation-delay: 100ms;
+  animation-delay: calc(var(--intro) + 100ms);
 }
 [data-stagger] > *:nth-child(4) {
-  animation-delay: 150ms;
+  animation-delay: calc(var(--intro) + 150ms);
 }
 [data-stagger] > *:nth-child(5) {
-  animation-delay: 200ms;
+  animation-delay: calc(var(--intro) + 200ms);
 }
 [data-stagger] > *:nth-child(6) {
-  animation-delay: 250ms;
+  animation-delay: calc(var(--intro) + 250ms);
 }
 [data-stagger] > *:nth-child(7) {
-  animation-delay: 300ms;
+  animation-delay: calc(var(--intro) + 300ms);
 }
 [data-stagger] > *:nth-child(n + 8) {
-  animation-delay: 350ms;
+  animation-delay: calc(var(--intro) + 350ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-stagger] > *,
-  .animate-rise {
+  .animate-rise,
+  .sky-scene {
     animation: none;
   }
 }
 
 .maplibregl-ctrl-attrib {
   font-size: 10px;
+}
+
+/* ---------- intro ---------- */
+
+:root {
+  /* how long page entrances wait for the splash to lift */
+  --intro: 1.75s;
+}
+.intro-seen {
+  --intro: 0s;
+}
+
+.animate-rise {
+  animation-delay: var(--intro);
+}
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--background);
+  color: var(--foreground);
+  animation: splash-lift 0.8s cubic-bezier(0.7, 0, 0.2, 1) 1.45s forwards;
+}
+.intro-seen .splash {
+  display: none;
+}
+.splash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: splash-recede 0.8s cubic-bezier(0.7, 0, 0.2, 1) 1.45s forwards;
+}
+.splash-mark {
+  width: 76px;
+  height: 76px;
+  overflow: visible;
+}
+.splash-sun {
+  transform-origin: 13px 16.5px;
+  animation: splash-sun 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+}
+.splash-rays {
+  transform-origin: 13px 16.5px;
+  animation: splash-rays 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
+}
+.splash-cloud {
+  animation: splash-cloud 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s both;
+}
+.splash-word {
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  margin-right: -0.45em;
+}
+.splash-word span {
+  display: inline-block;
+  animation: splash-letter 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.splash-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-foreground);
+  animation: splash-fade 0.6s ease 0.85s both;
+}
+.splash-line {
+  position: relative;
+  width: 120px;
+  height: 1px;
+  margin-top: 10px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+.splash-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--foreground);
+  transform-origin: left;
+  animation: splash-load 1s cubic-bezier(0.6, 0, 0.2, 1) 0.4s both;
+}
+
+@keyframes splash-sun {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+}
+@keyframes splash-rays {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+}
+@keyframes splash-cloud {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+@keyframes splash-letter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+@keyframes splash-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes splash-load {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes splash-recede {
+  to {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.96);
+  }
+}
+@keyframes splash-lift {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+/* the 3D sky fades in once the curtain is up */
+.sky-scene {
+  animation: sky-in 1.4s ease var(--intro) both;
+}
+@keyframes sky-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
 }

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
+import Splash from "@/components/chrome/splash";
 import { themeScript } from "@/lib/theme-script";
 import "@/styles/globals.css";
 
@@ -59,7 +60,10 @@ export default function RootLayout({
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: pre-paint theme script */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-dvh font-sans antialiased">{children}</body>
+      <body className="min-h-dvh font-sans antialiased">
+        <Splash />
+        {children}
+      </body>
     </html>
   );
 }

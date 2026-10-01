@@ -49,14 +49,16 @@ export default function Sky({
         className="absolute inset-0 hidden dark:block"
         style={{ background: skyGradient(sky, isDay, "dark") }}
       />
-      <WeatherScene
-        sky={sky}
-        isDay={isDay}
-        cloudCover={cloudCover}
-        windDirection={windDirection}
-        windSpeed={windSpeed}
-        onFlash={flash}
-      />
+      <div className="sky-scene absolute inset-0">
+        <WeatherScene
+          sky={sky}
+          isDay={isDay}
+          cloudCover={cloudCover}
+          windDirection={windDirection}
+          windSpeed={windSpeed}
+          onFlash={flash}
+        />
+      </div>
       <div
         ref={flashRef}
         className="absolute inset-0 bg-indigo-100 opacity-0"

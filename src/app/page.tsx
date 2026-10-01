@@ -119,7 +119,7 @@ export default async function Home({
             <div className="animate-rise px-1 py-4 lg:py-8">
               <Hero forecast={forecast} />
             </div>
-            <div className="animate-rise [animation-delay:180ms] max-lg:order-3">
+            <div className="animate-rise [animation-delay:calc(var(--intro)+180ms)] max-lg:order-3">
               <Daily
                 days={forecast.daily}
                 units={units}
@@ -128,7 +128,7 @@ export default async function Home({
             </div>
           </div>
 
-          <div className="animate-rise min-w-0 [animation-delay:90ms] max-lg:order-2 lg:col-start-2">
+          <div className="animate-rise min-w-0 [animation-delay:calc(var(--intro)+90ms)] max-lg:order-2 lg:col-start-2">
             <Hourly hours={forecast.hourly} summary={summarize(forecast)} />
           </div>
 
