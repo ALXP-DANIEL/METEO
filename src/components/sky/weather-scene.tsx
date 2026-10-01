@@ -12,6 +12,8 @@ type WeatherSceneProps = {
   /** 0–360°, the direction rain and clouds are pushed toward. */
   windDirection: number;
   windSpeed: number;
+  /** The WMO code, for precipitation type and intensity. */
+  code: number;
   onFlash: () => void;
 };
 
@@ -22,6 +24,7 @@ const RAIN_VERT = /* glsl */ `
   uniform float uSpeed;
   uniform vec2 uWind;
   uniform float uHeight;
+  uniform float uLen;
   varying float vEnd;
   varying float vDepth;
   void main() {
@@ -30,7 +33,7 @@ const RAIN_VERT = /* glsl */ `
     p.y = fall;
     p.xz += uWind * (fall / uHeight);
     // the tail of each streak trails up and against the wind
-    p.y += aEnd * 0.9;
+    p.y += aEnd * uLen;
     p.xz -= uWind * aEnd * 0.04;
     vEnd = aEnd;
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
@@ -54,15 +57,18 @@ const SNOW_VERT = /* glsl */ `
   uniform float uHeight;
   uniform float uPixelRatio;
   uniform vec2 uWind;
+  uniform float uFall;
+  uniform float uSize;
+  uniform float uSway;
   varying float vAlpha;
   void main() {
     vec3 p = position;
-    float speed = 1.2 + aSeed * 1.6;
+    float speed = (1.2 + aSeed * 1.6) * uFall;
     p.y = mod(p.y - uTime * speed + uHeight * 0.5, uHeight) - uHeight * 0.5;
-    p.x += sin(uTime * 0.6 + aSeed * 40.0) * 1.2 + uWind.x * 0.15 * (p.y / uHeight);
-    p.z += cos(uTime * 0.5 + aSeed * 23.0) * 0.8;
+    p.x += sin(uTime * 0.6 + aSeed * 40.0) * 1.2 * uSway + uWind.x * 0.15 * (p.y / uHeight);
+    p.z += cos(uTime * 0.5 + aSeed * 23.0) * 0.8 * uSway;
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
-    gl_PointSize = (2.0 + aSeed * 4.0) * uPixelRatio * (30.0 / -mv.z);
+    gl_PointSize = (2.0 + aSeed * 4.0) * uSize * uPixelRatio * (30.0 / -mv.z);
     vAlpha = clamp(1.0 + mv.z / 70.0, 0.2, 1.0);
     gl_Position = projectionMatrix * mv;
   }
@@ -111,6 +117,7 @@ export default function WeatherScene({
   cloudCover,
   windDirection,
   windSpeed,
+  code,
   onFlash,
 }: WeatherSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -171,6 +178,18 @@ export default function WeatherScene({
     const rainy = sky === "rain" || sky === "storm";
     const snowy = sky === "snow";
     const storm = sky === "storm";
+    const freezing = [56, 57, 66, 67].includes(code);
+    const hail = code === 96 || code === 99;
+    // 0–1: drizzle is a fine mist of streaks, a downpour a dense sheet.
+    const intensity = storm
+      ? 1
+      : code >= 51 && code <= 55
+        ? 0.3
+        : code === 65 || code === 82
+          ? 1
+          : code === 63 || code === 81
+            ? 0.75
+            : 0.55;
     const heavy = sky === "overcast" || sky === "fog" || rainy || snowy;
 
     /* ---------- stars ---------- */
@@ -313,7 +332,7 @@ export default function WeatherScene({
     const volume = { width: 90, height: 60, depth: 70 };
     let rain: THREE.LineSegments | null = null;
     if (rainy) {
-      const count = Math.round((storm ? 5000 : 3200) * density);
+      const count = Math.round(5000 * Math.max(0.25, intensity) * density);
       const positions = new Float32Array(count * 6);
       const offsets = new Float32Array(count * 2);
       const ends = new Float32Array(count * 2);
@@ -341,9 +360,10 @@ export default function WeatherScene({
           depthWrite: false,
           uniforms: {
             uTime: { value: 0 },
-            uSpeed: { value: storm ? 42 : 32 },
+            uSpeed: { value: 20 + intensity * 24 },
             uWind: { value: wind },
             uHeight: { value: volume.height },
+            uLen: { value: 0.45 + intensity * 0.9 },
             uColor: { value: new THREE.Color() },
             uOpacity: { value: 0.55 },
           },
@@ -354,13 +374,19 @@ export default function WeatherScene({
       scene.add(rain);
     }
 
-    /* ---------- snow ---------- */
-    let snow: THREE.Points | null = null;
-    if (snowy) {
-      const count = Math.round(2600 * density);
-      const positions = new Float32Array(count * 3);
-      const seeds = new Float32Array(count);
-      for (let i = 0; i < count; i++) {
+    /* ---------- snow, sleet, hail ---------- */
+    // One particle system, tuned per kind: snow drifts, sleet falls fast with
+    // little sway, hail drops like stones.
+    const makeFlakes = (
+      count: number,
+      fall: number,
+      size: number,
+      sway: number,
+    ) => {
+      const n = Math.round(count * density);
+      const positions = new Float32Array(n * 3);
+      const seeds = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
         positions[i * 3] = (Math.random() - 0.5) * volume.width;
         positions[i * 3 + 1] = (Math.random() - 0.5) * volume.height;
         positions[i * 3 + 2] = -2 - Math.random() * volume.depth;
@@ -383,13 +409,52 @@ export default function WeatherScene({
             uHeight: { value: volume.height },
             uPixelRatio: { value: pixelRatio },
             uWind: { value: wind },
+            uFall: { value: fall },
+            uSize: { value: size },
+            uSway: { value: sway },
             uColor: { value: new THREE.Color("#ffffff") },
           },
         }),
       );
-      snow = new THREE.Points(geometry, material);
-      snow.frustumCulled = false;
-      scene.add(snow);
+      const points = new THREE.Points(geometry, material);
+      points.frustumCulled = false;
+      scene.add(points);
+      return points;
+    };
+    const flakes: THREE.Points[] = [];
+    if (snowy) flakes.push(makeFlakes(2600, 1, 1, 1));
+    if (freezing) flakes.push(makeFlakes(1100, 4.5, 0.75, 0.3));
+    if (hail) flakes.push(makeFlakes(800, 15, 0.9, 0.05));
+
+    /* ---------- fog ---------- */
+    const mists: { sprite: THREE.Sprite; speed: number }[] = [];
+    if (sky === "fog") {
+      scene.fog = new THREE.Fog("#c9ced6", 6, 75);
+      const count = Math.round(26 * (coarse ? 0.6 : 1));
+      for (let i = 0; i < count; i++) {
+        const material = track(
+          new THREE.SpriteMaterial({
+            map: cloudTextures[i % cloudTextures.length],
+            transparent: true,
+            depthWrite: false,
+            fog: false,
+            opacity: 0.22 + Math.random() * 0.2,
+          }),
+        );
+        const sprite = new THREE.Sprite(material);
+        const depth = 6 + Math.random() * 40;
+        sprite.position.set(
+          (Math.random() - 0.5) * depth * 3,
+          -4 - Math.random() * 6 + depth * 0.08,
+          -depth,
+        );
+        sprite.scale.set(40 + Math.random() * 40, 8 + Math.random() * 6, 1);
+        mists.push({
+          sprite,
+          speed: (0.3 + Math.random() * 0.6) * (Math.random() < 0.5 ? -1 : 1),
+        });
+        scene.add(sprite);
+      }
     }
 
     /* ---------- lightning ---------- */
@@ -496,12 +561,23 @@ export default function WeatherScene({
         const u = (rain.material as THREE.ShaderMaterial).uniforms;
         u.uTime!.value = reduced ? 0 : t;
         u.uColor!.value.set(dark ? "#c7d7f5" : "#3b5174");
-        u.uOpacity!.value = dark ? 0.5 : 0.4;
+        u.uOpacity!.value = (dark ? 0.3 : 0.22) + intensity * 0.3;
       }
-      if (snow) {
-        const u = (snow.material as THREE.ShaderMaterial).uniforms;
+      for (const points of flakes) {
+        const u = (points.material as THREE.ShaderMaterial).uniforms;
         u.uTime!.value = reduced ? 0 : t;
         u.uColor!.value.set(dark ? "#ffffff" : "#f8fbff");
+      }
+      if (scene.fog instanceof THREE.Fog)
+        scene.fog.color.set(dark ? "#3a404c" : "#d6dae0");
+      for (const mist of mists) {
+        if (!reduced) {
+          mist.sprite.position.x += mist.speed * dt;
+          const limit = -mist.sprite.position.z * 1.6 + 30;
+          if (mist.sprite.position.x > limit) mist.sprite.position.x = -limit;
+          if (mist.sprite.position.x < -limit) mist.sprite.position.x = limit;
+        }
+        mist.sprite.material.color.set(dark ? "#9aa3b2" : "#ffffff");
       }
       celestial.position.y = 15 + Math.sin(t * 0.05) * 0.5;
 
@@ -554,7 +630,7 @@ export default function WeatherScene({
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [sky, isDay, cloudCover, windDirection, windSpeed]);
+  }, [sky, isDay, cloudCover, windDirection, windSpeed, code]);
 
   return <div ref={hostRef} className="absolute inset-0" />;
 }

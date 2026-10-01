@@ -13,6 +13,7 @@ type SkyProps = {
   cloudCover: number;
   windDirection: number;
   windSpeed: number;
+  code: number;
 };
 
 /**
@@ -25,6 +26,7 @@ export default function Sky({
   cloudCover,
   windDirection,
   windSpeed,
+  code,
 }: SkyProps) {
   const flashRef = useRef<HTMLDivElement>(null);
   const flash = () =>
@@ -56,6 +58,7 @@ export default function Sky({
           cloudCover={cloudCover}
           windDirection={windDirection}
           windSpeed={windSpeed}
+          code={code}
           onFlash={flash}
         />
       </div>

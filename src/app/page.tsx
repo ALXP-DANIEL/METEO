@@ -28,6 +28,21 @@ import {
 } from "@/lib/weather";
 import { condition } from "@/lib/wmo";
 
+/** Backdrop preview names, mapped to a representative WMO code. */
+const SKY_PREVIEW: Record<string, number> = {
+  clear: 0,
+  cloudy: 2,
+  overcast: 3,
+  fog: 45,
+  drizzle: 53,
+  rain: 63,
+  downpour: 65,
+  sleet: 66,
+  snow: 73,
+  storm: 95,
+  hail: 99,
+};
+
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 async function load(searchParams: SearchParams) {
@@ -92,12 +107,18 @@ export default async function Home({
 }) {
   const { forecast, units, located, gps } = await load(searchParams);
   const { current, place } = forecast;
+  // ?sky=snow&night=1 previews any weather in the backdrop (handy for testing).
+  const preview = SKY_PREVIEW[String((await searchParams).sky)];
+  const skyCode = preview ?? current.code;
+  const skyDay =
+    preview === undefined ? current.isDay : (await searchParams).night !== "1";
 
   return (
     <>
       <Sky
-        sky={condition(current.code).sky}
-        isDay={current.isDay}
+        sky={condition(skyCode).sky}
+        isDay={skyDay}
+        code={skyCode}
         cloudCover={current.cloudCover}
         windDirection={current.windDirection}
         windSpeed={current.windSpeed}
