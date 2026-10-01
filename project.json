@@ -1,51 +1,51 @@
 {
-    "slug": "meteo",
-    "title": "METEO",
-    "type": "Weather App",
-    "category": "Realtime Forecast",
-    "summary": "Live weather for anywhere on Earth: an animated sky that matches the conditions, a 24-hour timeline, a 10-day outlook, air quality and a rain radar.",
-    "overview": "METEO started as my first Next.js project and was rebuilt from scratch on Next.js 16. It runs on free, keyless Open-Meteo data, paints the backdrop to match the real sky (rain, snow, stars, storms), and adds city search, an animated precipitation radar, air quality, UV, sun and moon tiles, and \u00b0C/\u00b0F units.",
-    "year": "2026",
-    "spotlight": true,
-    "thumbnail": "./public/preview.png",
-    "spotlightImage": "./public/spotlight.png",
-    "techStack": [
-        "Next.js 16",
-        "React 19",
-        "TypeScript",
-        "Tailwind CSS 4",
-        "MapLibre GL",
-        "Open-Meteo",
-        "Canvas"
-    ],
-    "highlights": [
-        "Canvas sky that renders the live weather: rain, snow, stars, clouds and lightning.",
-        "\u2318K city search with recent places and one-tap geolocation.",
-        "Animated RainViewer precipitation radar on a MapLibre basemap.",
-        "Hourly temperature curve, 10-day range bars, air quality, UV, wind, sun and moon tiles."
-    ],
-    "previewImages": [
-        {
-            "src": "./public/preview.png",
-            "title": "Current Conditions",
-            "caption": "Live current weather with a quick-glance visual summary.",
-            "alt": "METEO current weather overview"
-        },
-        {
-            "src": "./public/spotlight.png",
-            "title": "Forecast & Map",
-            "caption": "7-day forecast alongside interactive weather map layers.",
-            "alt": "METEO forecast and map view"
-        },
-        {
-            "src": "./public/backdrop.png",
-            "title": "Interface",
-            "caption": "Responsive layout across the forecast and map views.",
-            "alt": "METEO interface backdrop"
-        }
-    ],
-    "actions": {
-        "open": "https://meteo.alifdaniel.dpdns.org",
-        "github": "https://github.com/ALXP-DANIEL/METEO"
+  "slug": "meteo",
+  "title": "METEO",
+  "type": "Weather App",
+  "category": "Realtime Forecast",
+  "summary": "Live weather for anywhere on Earth, set in a 3D sky that rains, snows, storms and clears with the real forecast.",
+  "overview": "METEO was my first Next.js project, rebuilt from scratch on Next.js 16. A three.js sky behind the app renders the real weather: drifting cloud banks, rain from drizzle to downpour slanted by the actual wind, sleet, hail, snow, fog, stars and lightning. Over it sit clean black-and-white cards for a 24-hour curve, a 10-day outlook, wind, sun, UV, air quality, humidity, pressure, moon and an animated rain radar. It runs on free, keyless data from Open-Meteo and RainViewer.",
+  "year": "2026",
+  "spotlight": true,
+  "thumbnail": "./public/preview.png",
+  "spotlightImage": "./public/spotlight.png",
+  "techStack": [
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS 4",
+    "three.js",
+    "MapLibre GL",
+    "Open-Meteo"
+  ],
+  "highlights": [
+    "3D weather backdrop in three.js: clouds, rain by intensity, sleet, hail, snow, fog, stars and lightning, all moved by the real wind.",
+    "First-visit splash that draws the logo, then a staggered entrance with a temperature count-up.",
+    "⌘K city search, one-tap geolocation, °C/°F and a 'surprise me' tour of extreme climates.",
+    "Animated RainViewer radar that follows the selected place, plus per-place Open Graph share cards."
+  ],
+  "previewImages": [
+    {
+      "src": "./public/preview.png",
+      "title": "Live conditions",
+      "caption": "Current weather, 24-hour curve, 10-day outlook and detail tiles over a sky that matches outside.",
+      "alt": "METEO showing Shah Alam's weather in light mode"
+    },
+    {
+      "src": "./public/spotlight.png",
+      "title": "3D weather",
+      "caption": "A three.js sky renders the real weather: here, rain at night, slanted by the wind.",
+      "alt": "METEO in dark mode with 3D rain falling behind the cards"
+    },
+    {
+      "src": "./public/backdrop.png",
+      "title": "Mobile",
+      "caption": "The same experience on a phone, here under falling snow.",
+      "alt": "METEO on a phone-sized screen with snow falling"
     }
+  ],
+  "actions": {
+    "open": "https://meteo.alifdaniel.dpdns.org",
+    "github": "https://github.com/ALXP-DANIEL/METEO"
+  }
 }

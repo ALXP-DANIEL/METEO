@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(url),
   title: { default: "METEO — live weather", template: "%s · METEO" },
   description:
-    "Live conditions, a 24-hour timeline, a 10-day outlook, air quality and an animated rain radar for anywhere on Earth.",
+    "Live weather for anywhere on Earth in a 3D sky that matches the forecast: hourly and 10-day outlook, air quality, UV, wind and an animated rain radar.",
   applicationName: "METEO",
   authors: [{ name: "Alif Daniel", url: "https://alifdaniel.dpdns.org" }],
   keywords: [
