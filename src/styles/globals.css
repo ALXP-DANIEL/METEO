@@ -1,105 +1,116 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+@theme {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+  --color-glass: rgb(255 255 255 / 0.07);
+  --color-glass-strong: rgb(255 255 255 / 0.12);
+  --color-line: rgb(255 255 255 / 0.12);
+  --color-ink: rgb(255 255 255 / 0.96);
+  --color-ink-soft: rgb(255 255 255 / 0.68);
+  --color-ink-faint: rgb(255 255 255 / 0.45);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --success: 120 100% 50%;
-    --success-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --success: 120 100% 20.6%;
-    --success-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
   }
+
   body {
-    @apply bg-background text-foreground;
+    background: #0b1220;
+    color: var(--color-ink);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: rgb(255 255 255 / 0.9);
+    color: #0b1220;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(255 255 255 / 0.8);
+    outline-offset: 2px;
   }
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-  display: block;
+@utility glass {
+  background: var(--color-glass);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: transparent;
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgb(139, 139, 139, 0.5);
-  border-radius: 10px;
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(139, 139, 139, 0.9);
+/* Stagger helper: children of [data-stagger] rise in one after another. */
+[data-stagger] > * {
+  animation: var(--animate-rise);
+}
+[data-stagger] > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+[data-stagger] > *:nth-child(3) {
+  animation-delay: 120ms;
+}
+[data-stagger] > *:nth-child(4) {
+  animation-delay: 180ms;
+}
+[data-stagger] > *:nth-child(5) {
+  animation-delay: 240ms;
+}
+[data-stagger] > *:nth-child(6) {
+  animation-delay: 300ms;
+}
+[data-stagger] > *:nth-child(7) {
+  animation-delay: 360ms;
+}
+[data-stagger] > *:nth-child(8) {
+  animation-delay: 420ms;
+}
+[data-stagger] > *:nth-child(n + 9) {
+  animation-delay: 480ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-stagger] > * {
+    animation: none;
+  }
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+  background: rgb(0 0 0 / 0.4) !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: rgb(255 255 255 / 0.6) !important;
 }

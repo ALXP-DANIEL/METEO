@@ -3,24 +3,26 @@
     "title": "METEO",
     "type": "Weather App",
     "category": "Realtime Forecast",
-    "summary": "Real-time weather app built with Next.js 14, TypeScript, and shadcn/ui for current conditions, 7-day forecasts, and interactive map insights.",
-    "overview": "METEO is a weather experience focused on speed and clarity. It combines live current weather, multi-day forecasting, and map-based context in a single responsive interface so users can quickly understand local conditions and upcoming changes.",
+    "summary": "Live weather for anywhere on Earth: an animated sky that matches the conditions, a 24-hour timeline, a 10-day outlook, air quality and a rain radar.",
+    "overview": "METEO started as my first Next.js project and was rebuilt from scratch on Next.js 16. It runs on free, keyless Open-Meteo data, paints the backdrop to match the real sky (rain, snow, stars, storms), and adds city search, an animated precipitation radar, air quality, UV, sun and moon tiles, and \u00b0C/\u00b0F units.",
     "year": "2026",
     "spotlight": true,
     "thumbnail": "./public/preview.png",
     "spotlightImage": "./public/spotlight.png",
     "techStack": [
-        "Next.js",
+        "Next.js 16",
+        "React 19",
         "TypeScript",
-        "shadcn/ui",
-        "Tailwind CSS",
-        "Mapbox GL",
-        "Zod"
+        "Tailwind CSS 4",
+        "MapLibre GL",
+        "Open-Meteo",
+        "Canvas"
     ],
     "highlights": [
-        "Current weather conditions with quick visual context.",
-        "Forecast weather and temperature for the next 7 days.",
-        "Interactive map with weather-related data layers."
+        "Canvas sky that renders the live weather: rain, snow, stars, clouds and lightning.",
+        "\u2318K city search with recent places and one-tap geolocation.",
+        "Animated RainViewer precipitation radar on a MapLibre basemap.",
+        "Hourly temperature curve, 10-day range bars, air quality, UV, wind, sun and moon tiles."
     ],
     "previewImages": [
         {
