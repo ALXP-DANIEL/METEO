@@ -35,7 +35,13 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
   const [host, setHost] = useState("");
   const [frames, setFrames] = useState<Frame[]>([]);
   const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  // Frames whose tiles have been requested; a frame joins on first view.
+  const [loaded, setLoaded] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    setLoaded((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
+  }, [index]);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,10 +54,12 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
           host: string;
           radar: { past: Frame[]; nowcast?: Frame[] };
         }) => {
-          const all = [...data.radar.past, ...(data.radar.nowcast ?? [])];
+          // Last hour only: RainViewer rate-limits, and every frame costs a tile set.
+          const all = data.radar.past.slice(-6);
           setHost(data.host);
           setFrames(all);
-          setIndex(data.radar.past.length - 1);
+          setIndex(all.length - 1);
+          setLoaded(new Set([all.length - 1]));
         },
       )
       .catch(() => {});
@@ -78,34 +86,38 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
   return (
     <div className="relative h-full">
       <MapView
-        initialViewState={{ latitude: lat, longitude: lon, zoom: 6 }}
+        initialViewState={{ latitude: lat, longitude: lon, zoom: 5 }}
         mapStyle={dark ? STYLES.dark : STYLES.light}
         maxZoom={10}
         attributionControl={false}
         cooperativeGestures
+        // A missing or rate-limited radar tile just leaves a gap; don't spam the console.
+        onError={() => {}}
         style={{ width: "100%", height: "100%" }}
       >
         {/* every frame is mounted so playback only toggles opacity — no flicker */}
         {host
-          ? frames.map((f, i) => (
-              <Source
-                key={f.path}
-                id={`radar-${f.time}`}
-                type="raster"
-                tiles={[`${host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`]}
-                tileSize={256}
-                maxzoom={7}
-              >
-                <Layer
-                  id={`radar-layer-${f.time}`}
+          ? frames.map((f, i) =>
+              !loaded.has(i) ? null : (
+                <Source
+                  key={f.path}
+                  id={`radar-${f.time}`}
                   type="raster"
-                  paint={{
-                    "raster-opacity": i === index ? 0.75 : 0,
-                    "raster-opacity-transition": { duration: 300 },
-                  }}
-                />
-              </Source>
-            ))
+                  tiles={[`${host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`]}
+                  tileSize={256}
+                  maxzoom={7}
+                >
+                  <Layer
+                    id={`radar-layer-${f.time}`}
+                    type="raster"
+                    paint={{
+                      "raster-opacity": i === index ? 0.75 : 0,
+                      "raster-opacity-transition": { duration: 300 },
+                    }}
+                  />
+                </Source>
+              ),
+            )
           : null}
         <Marker latitude={lat} longitude={lon}>
           <span className="relative flex size-4">
