@@ -7,8 +7,8 @@
   "overview": "METEO was my first Next.js project, rebuilt from scratch on Next.js 16. A three.js sky behind the app renders the real weather: drifting cloud banks, rain from drizzle to downpour slanted by the actual wind, sleet, hail, snow, fog, stars and lightning. Over it sit clean black-and-white cards for a 24-hour curve, a 10-day outlook, wind, sun, UV, air quality, humidity, pressure, moon and an animated rain radar. It runs on free, keyless data from Open-Meteo and RainViewer.",
   "year": "2026",
   "spotlight": true,
-  "thumbnail": "./public/preview.png",
-  "spotlightImage": "./public/spotlight.png",
+  "thumbnail": "./metadata/picture/thumbnail.jpeg",
+  "spotlightImage": "./metadata/picture/spotlight.jpeg",
   "techStack": [
     "Next.js 16",
     "React 19",
@@ -26,22 +26,28 @@
   ],
   "previewImages": [
     {
-      "src": "./public/preview.png",
-      "title": "Live conditions",
-      "caption": "Current weather, 24-hour curve, 10-day outlook and detail tiles over a sky that matches outside.",
-      "alt": "METEO showing Shah Alam's weather in light mode"
+      "src": "./metadata/picture/preview-1.jpeg",
+      "title": "Dashboard preview",
+      "caption": "AI-styled product presentation of the METEO dashboard, based on the live interface.",
+      "alt": "METEO dashboard presented in a browser frame surrounded by clouds"
     },
     {
-      "src": "./public/spotlight.png",
+      "src": "./metadata/picture/preview-2.jpeg",
       "title": "3D weather",
       "caption": "A three.js sky renders the real weather: here, rain at night, slanted by the wind.",
       "alt": "METEO in dark mode with 3D rain falling behind the cards"
     },
     {
-      "src": "./public/backdrop.png",
+      "src": "./metadata/picture/preview-3.jpeg",
       "title": "Mobile",
       "caption": "The same experience on a phone, here under falling snow.",
       "alt": "METEO on a phone-sized screen with snow falling"
+    },
+    {
+      "src": "./metadata/picture/backdrop.jpeg",
+      "title": "Weather backdrop",
+      "caption": "Generated atmospheric artwork inspired by METEO’s changing skies.",
+      "alt": "Silver daylight clouds blending into a dark rainy sky"
     }
   ],
   "actions": {

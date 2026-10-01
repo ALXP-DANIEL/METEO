@@ -1,4 +1,4 @@
-![METEO](https://raw.githubusercontent.com/ALXP-DANIEL/METEO/master/public/preview.png)
+![METEO](https://raw.githubusercontent.com/ALXP-DANIEL/METEO/master/metadata/picture/thumbnail.jpeg)
 
 # METEO
 
@@ -6,7 +6,7 @@ Live weather for anywhere on Earth, set in a 3D sky that matches the weather out
 
 **[meteo.alifdaniel.dpdns.org](https://meteo.alifdaniel.dpdns.org)**
 
-![METEO at night in the rain](https://raw.githubusercontent.com/ALXP-DANIEL/METEO/master/public/spotlight.png)
+![METEO at night in the rain](https://raw.githubusercontent.com/ALXP-DANIEL/METEO/master/metadata/picture/preview-2.jpeg)
 
 ## Features
 
