@@ -164,6 +164,20 @@ export default async function Home({
             >
               RainViewer
             </a>{" "}
+            ·{" "}
+            <a
+              className="underline-offset-2 hover:underline"
+              href="https://carto.com/attributions"
+            >
+              © CARTO
+            </a>{" "}
+            ·{" "}
+            <a
+              className="underline-offset-2 hover:underline"
+              href="https://www.openstreetmap.org/copyright"
+            >
+              © OpenStreetMap
+            </a>{" "}
             · Icons:{" "}
             <a
               className="underline-offset-2 hover:underline"

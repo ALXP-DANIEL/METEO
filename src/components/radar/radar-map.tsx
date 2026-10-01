@@ -81,7 +81,7 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
         initialViewState={{ latitude: lat, longitude: lon, zoom: 6 }}
         mapStyle={dark ? STYLES.dark : STYLES.light}
         maxZoom={10}
-        attributionControl={{ compact: true }}
+        attributionControl={false}
         cooperativeGestures
         style={{ width: "100%", height: "100%" }}
       >
@@ -95,7 +95,6 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
                 tiles={[`${host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`]}
                 tileSize={256}
                 maxzoom={7}
-                attribution='<a href="https://www.rainviewer.com" target="_blank">RainViewer</a>'
               >
                 <Layer
                   id={`radar-layer-${f.time}`}
