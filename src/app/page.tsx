@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import AutoLocate from "@/components/chrome/auto-locate";
-import Dock from "@/components/chrome/dock";
 import Header from "@/components/chrome/header";
 import Radar from "@/components/radar/radar";
 import Sky from "@/components/sky/sky";
@@ -108,8 +107,16 @@ export default async function Home({
         }
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 sm:px-6 lg:px-8">
-        <Header />
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-10 sm:px-6 lg:px-8">
+        <Header
+          units={units}
+          current={{
+            name: place.name,
+            region: place.region,
+            lat: place.lat,
+            lon: place.lon,
+          }}
+        />
 
         <main
           key={`${place.lat},${place.lon},${units}`}
@@ -202,15 +209,6 @@ export default async function Home({
           </p>
         </footer>
       </div>
-      <Dock
-        units={units}
-        current={{
-          name: place.name,
-          region: place.region,
-          lat: place.lat,
-          lon: place.lon,
-        }}
-      />
     </>
   );
 }
