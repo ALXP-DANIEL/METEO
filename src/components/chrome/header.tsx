@@ -21,13 +21,19 @@ import { ThemeToggle } from "./theme";
 const iconButton =
   "grid size-9 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
-type HeaderProps = { units: Units; current: SavedPlace };
+type HeaderProps = {
+  units: Units;
+  current: SavedPlace;
+  /** True when the place on screen came from the device location. */
+  gps: boolean;
+};
 
 /** Brand, the search bar, and the tools: locate, units, surprise, theme. */
-export default function Header({ units, current }: HeaderProps) {
+export default function Header({ units, current, gps }: HeaderProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [denied, setDenied] = useState(false);
   const [pending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -59,9 +65,13 @@ export default function Header({ units, current }: HeaderProps) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLocating(false);
+        setDenied(false);
         go({ lat: position.coords.latitude, lon: position.coords.longitude });
       },
-      () => setLocating(false),
+      () => {
+        setLocating(false);
+        setDenied(true);
+      },
       { timeout: 10000, maximumAge: 600000 },
     );
   };
@@ -116,28 +126,53 @@ export default function Header({ units, current }: HeaderProps) {
         </kbd>
       </button>
 
-      <div className="surface ml-auto flex shrink-0 items-center gap-0.5 rounded-2xl p-1">
-        <button
-          type="button"
-          onClick={locate}
-          aria-label="Use my location"
-          title="Use my location"
-          className={iconButton}
-        >
-          <CrosshairIcon
-            weight="bold"
-            className={cn("size-4", locating && "animate-pulse")}
-          />
-        </button>
+      {/* tools, grouped by what they act on: the place, the units, the app */}
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="surface flex items-center gap-0.5 rounded-2xl p-1">
+          <button
+            type="button"
+            onClick={locate}
+            aria-pressed={gps}
+            aria-label={gps ? "Showing your location" : "Use my location"}
+            title={
+              denied
+                ? "Location access is blocked"
+                : gps
+                  ? "Showing your location"
+                  : "Use my location"
+            }
+            className={cn(
+              iconButton,
+              gps &&
+                "bg-foreground text-background hover:bg-foreground hover:text-background",
+              denied && !gps && "text-red-500",
+            )}
+          >
+            <CrosshairIcon
+              weight={gps ? "fill" : "bold"}
+              className={cn("size-4", locating && "animate-spin")}
+            />
+          </button>
+          <button
+            type="button"
+            onClick={surprise}
+            aria-label="Surprise me"
+            title="Surprise me"
+            className={cn(iconButton, "hidden sm:grid")}
+          >
+            <DiceFiveIcon weight="bold" className="size-4" />
+          </button>
+        </div>
+
         <div
           role="radiogroup"
           aria-label="Units"
-          className="relative mx-0.5 hidden h-9 rounded-xl bg-muted p-0.5 sm:flex"
+          className="surface relative flex h-11 rounded-2xl p-1"
         >
           <span
             aria-hidden
             className={cn(
-              "absolute inset-y-0.5 left-0.5 w-9 rounded-[10px] bg-card shadow-sm transition-transform duration-300",
+              "absolute inset-y-1 left-1 w-9 rounded-xl bg-foreground transition-transform duration-300",
               units === "imperial" && "translate-x-9",
             )}
           />
@@ -151,40 +186,28 @@ export default function Header({ units, current }: HeaderProps) {
               onClick={() => setUnits(value)}
               className={cn(
                 "relative w-9 font-mono text-xs transition-colors",
-                units === value ? "text-foreground" : "text-muted-foreground",
+                units === value
+                  ? "text-background"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {value === "metric" ? "°C" : "°F"}
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => setUnits(units === "metric" ? "imperial" : "metric")}
-          aria-label="Switch units"
-          className={cn(iconButton, "font-mono text-xs sm:hidden")}
-        >
-          {units === "metric" ? "°C" : "°F"}
-        </button>
-        <button
-          type="button"
-          onClick={surprise}
-          aria-label="Surprise me"
-          title="Surprise me"
-          className={iconButton}
-        >
-          <DiceFiveIcon weight="bold" className="size-4" />
-        </button>
-        <ThemeToggle className={iconButton} />
-        <a
-          href="https://github.com/ALXP-DANIEL/METEO"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Source on GitHub"
-          className={cn(iconButton, "hidden sm:grid")}
-        >
-          <GithubLogoIcon weight="bold" className="size-4" />
-        </a>
+
+        <div className="surface flex items-center gap-0.5 rounded-2xl p-1">
+          <ThemeToggle className={iconButton} />
+          <a
+            href="https://github.com/ALXP-DANIEL/METEO"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Source on GitHub"
+            className={cn(iconButton, "hidden md:grid")}
+          >
+            <GithubLogoIcon weight="bold" className="size-4" />
+          </a>
+        </div>
       </div>
 
       <SearchDialog open={open} onOpenChange={setOpen} onPick={go} />

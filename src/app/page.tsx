@@ -45,7 +45,15 @@ async function load(searchParams: SearchParams) {
     name: pick("name"),
     region: pick("region"),
   });
-  return { place, units, located, forecast: await getForecast(place, units) };
+  // Geolocation links carry coordinates only; searched places carry a name.
+  const gps = located && !pick("name");
+  return {
+    place,
+    units,
+    located,
+    gps,
+    forecast: await getForecast(place, units),
+  };
 }
 
 export async function generateMetadata({
@@ -82,7 +90,7 @@ export default async function Home({
 }: {
   searchParams: SearchParams;
 }) {
-  const { forecast, units, located } = await load(searchParams);
+  const { forecast, units, located, gps } = await load(searchParams);
   const { current, place } = forecast;
 
   return (
@@ -109,6 +117,7 @@ export default async function Home({
 
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-10 sm:px-6 lg:px-8">
         <Header
+          gps={gps}
           units={units}
           current={{
             name: place.name,

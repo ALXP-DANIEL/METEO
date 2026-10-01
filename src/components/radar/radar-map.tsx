@@ -2,9 +2,15 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PauseIcon, PlayIcon } from "@phosphor-icons/react";
-import { Layer, Map as MapView, Marker, Source } from "@vis.gl/react-maplibre";
+import {
+  Layer,
+  type MapRef,
+  Map as MapView,
+  Marker,
+  Source,
+} from "@vis.gl/react-maplibre";
 import { setWorkerUrl } from "maplibre-gl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
@@ -32,6 +38,12 @@ function useDarkClass() {
 /** Live precipitation radar from RainViewer over a theme-matched basemap, animated. */
 export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
   const dark = useDarkClass();
+  const mapRef = useRef<MapRef>(null);
+
+  // Follow the place on screen: glide to it whenever the location changes.
+  useEffect(() => {
+    mapRef.current?.flyTo({ center: [lon, lat], zoom: 5, duration: 1600 });
+  }, [lat, lon]);
   const [host, setHost] = useState("");
   const [frames, setFrames] = useState<Frame[]>([]);
   const [index, setIndex] = useState(0);
@@ -86,6 +98,7 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
   return (
     <div className="relative h-full">
       <MapView
+        ref={mapRef}
         initialViewState={{ latitude: lat, longitude: lon, zoom: 5 }}
         mapStyle={dark ? STYLES.dark : STYLES.light}
         maxZoom={10}
