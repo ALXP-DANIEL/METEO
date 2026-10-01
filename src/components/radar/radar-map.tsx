@@ -10,11 +10,28 @@ setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
 type Frame = { time: number; path: string };
 
-const STYLE =
-  "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+const STYLES = {
+  light: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+};
 
-/** Live precipitation radar from RainViewer over a dark basemap, animated. */
+/** Follows the html.dark class so the basemap matches the theme toggle. */
+function useDarkClass() {
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => setDark(root.classList.contains("dark"));
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+  return dark;
+}
+
+/** Live precipitation radar from RainViewer over a theme-matched basemap, animated. */
 export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
+  const dark = useDarkClass();
   const [host, setHost] = useState("");
   const [frames, setFrames] = useState<Frame[]>([]);
   const [index, setIndex] = useState(0);
@@ -62,7 +79,7 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
     <div className="relative h-full">
       <MapView
         initialViewState={{ latitude: lat, longitude: lon, zoom: 6 }}
-        mapStyle={STYLE}
+        mapStyle={dark ? STYLES.dark : STYLES.light}
         maxZoom={10}
         attributionControl={{ compact: true }}
         cooperativeGestures
@@ -93,18 +110,18 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
           : null}
         <Marker latitude={lat} longitude={lon}>
           <span className="relative flex size-4">
-            <span className="absolute inset-0 animate-ping rounded-full bg-white/60" />
-            <span className="relative size-4 rounded-full border-2 border-slate-900 bg-white" />
+            <span className="absolute inset-0 animate-ping rounded-full bg-foreground/50" />
+            <span className="relative size-4 rounded-full border-2 border-card bg-foreground" />
           </span>
         </Marker>
       </MapView>
 
-      <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-full border border-line bg-slate-950/70 py-1.5 pr-4 pl-1.5 backdrop-blur-xl">
+      <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-full border border-border bg-card/85 py-1.5 pr-4 pl-1.5 backdrop-blur-xl">
         <button
           type="button"
           onClick={() => setPlaying((p) => !p)}
           aria-label={playing ? "Pause radar" : "Play radar"}
-          className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-slate-900"
+          className="grid size-8 shrink-0 place-items-center rounded-full bg-foreground text-background"
         >
           {playing ? (
             <PauseIcon weight="fill" className="size-3.5" />
@@ -122,9 +139,9 @@ export default function RadarMap({ lat, lon }: { lat: number; lon: number }) {
             setIndex(Number(event.target.value));
           }}
           aria-label="Radar time"
-          className="h-1 flex-1 cursor-pointer accent-white"
+          className="h-1 flex-1 cursor-pointer accent-current"
         />
-        <span className="font-mono text-xs text-ink-soft tabular-nums">
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
           {time}
         </span>
       </div>

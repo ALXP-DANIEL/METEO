@@ -45,7 +45,7 @@ export default function Hourly({
 
   return (
     <Panel title="Next 24 hours" className="gap-2">
-      <p className="text-sm text-ink-soft">{summary}</p>
+      <p className="text-sm text-muted-foreground">{summary}</p>
       <div className="scrollbar-none -mx-4 overflow-x-auto px-4 sm:-mx-5 sm:px-5">
         <div className="relative" style={{ width }}>
           <div className="flex">
@@ -55,7 +55,7 @@ export default function Hourly({
                 className="flex shrink-0 flex-col items-center gap-1 text-center"
                 style={{ width: COL }}
               >
-                <span className="text-xs text-ink-soft">
+                <span className="text-xs text-muted-foreground">
                   {i === 0 ? "Now" : hourLabel(hour.time)}
                 </span>
                 <img
@@ -65,7 +65,7 @@ export default function Hourly({
                   height={44}
                   className="size-11"
                 />
-                <span className="h-4 text-[11px] font-medium text-sky-200 tabular-nums">
+                <span className="h-4 text-[11px] font-medium text-sky-600 dark:text-sky-300 tabular-nums">
                   {hour.precipChance >= 20 ? `${hour.precipChance}%` : ""}
                 </span>
               </div>
@@ -79,26 +79,31 @@ export default function Hourly({
           >
             <defs>
               <linearGradient id="hourly-fill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stopColor="white" stopOpacity="0.22" />
-                <stop offset="1" stopColor="white" stopOpacity="0" />
+                <stop offset="0" stopColor="currentColor" stopOpacity="0.22" />
+                <stop offset="1" stopColor="currentColor" stopOpacity="0" />
               </linearGradient>
             </defs>
             <path d={area} fill="url(#hourly-fill)" />
             <path
               d={path}
               fill="none"
-              stroke="white"
+              stroke="currentColor"
               strokeOpacity="0.85"
               strokeWidth="2"
             />
             {points.map((p, i) => (
               <g key={hours[i]!.time}>
-                <circle cx={p.x} cy={p.y} r={i === 0 ? 4 : 2.5} fill="white" />
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={i === 0 ? 4 : 2.5}
+                  fill="currentColor"
+                />
                 <text
                   x={p.x}
                   y={p.y - 9}
                   textAnchor="middle"
-                  className="fill-white text-[13px] font-semibold tabular-nums"
+                  className="fill-current text-[13px] font-semibold tabular-nums"
                 >
                   {round(hours[i]!.temperature)}°
                 </text>

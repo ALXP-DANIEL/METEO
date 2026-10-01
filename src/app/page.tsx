@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import AutoLocate from "@/components/chrome/auto-locate";
-import Logo from "@/components/chrome/logo";
-import UnitToggle from "@/components/chrome/unit-toggle";
+import Dock from "@/components/chrome/dock";
+import Header from "@/components/chrome/header";
 import Radar from "@/components/radar/radar";
-import SearchPalette from "@/components/search/search-palette";
 import Sky from "@/components/sky/sky";
 import Daily from "@/components/weather/daily";
 import Hero from "@/components/weather/hero";
@@ -107,12 +106,8 @@ export default async function Home({
         }
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-10 sm:px-6 lg:px-8">
-        <nav className="flex items-center gap-3">
-          <Logo />
-          <SearchPalette />
-          <UnitToggle units={units} />
-        </nav>
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 sm:px-6 lg:px-8">
+        <Header />
 
         <main
           key={`${place.lat},${place.lon},${units}`}
@@ -153,7 +148,7 @@ export default async function Home({
           </div>
         </main>
 
-        <footer className="flex flex-wrap items-center justify-between gap-2 pt-4 font-mono text-[11px] text-ink-faint">
+        <footer className="flex flex-wrap items-center justify-between gap-2 pt-4 font-mono text-[11px] text-muted-foreground">
           <p>
             Data:{" "}
             <a
@@ -180,7 +175,7 @@ export default async function Home({
           <p>
             Built by{" "}
             <a
-              className="text-ink-soft underline-offset-2 hover:underline"
+              className="text-muted-foreground underline-offset-2 hover:underline"
               href="https://alifdaniel.dpdns.org"
             >
               Alif Daniel
@@ -188,6 +183,15 @@ export default async function Home({
           </p>
         </footer>
       </div>
+      <Dock
+        units={units}
+        current={{
+          name: place.name,
+          region: place.region,
+          lat: place.lat,
+          lon: place.lon,
+        }}
+      />
     </>
   );
 }

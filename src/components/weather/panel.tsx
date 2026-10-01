@@ -3,31 +3,22 @@ import { cn } from "@/lib/utils";
 
 type PanelProps = {
   title?: string;
-  icon?: ReactNode;
+  id?: string;
   className?: string;
   children: ReactNode;
 };
 
-/** The frosted-glass card every widget sits in. */
-export default function Panel({
-  title,
-  icon,
-  className,
-  children,
-}: PanelProps) {
+/** The card every widget sits in. */
+export default function Panel({ title, id, className, children }: PanelProps) {
   return (
     <section
+      id={id}
       className={cn(
-        "glass flex flex-col gap-3 rounded-3xl p-4 sm:p-5",
+        "surface flex flex-col gap-3 rounded-2xl p-4 sm:p-5",
         className,
       )}
     >
-      {title ? (
-        <h2 className="eyebrow flex items-center gap-1.5">
-          {icon}
-          {title}
-        </h2>
-      ) : null}
+      {title ? <h2 className="eyebrow">{title}</h2> : null}
       {children}
     </section>
   );

@@ -97,6 +97,8 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
       s: rand(180, 420),
       p: rand(0, 1),
     }));
+    const root = document.documentElement;
+    const isDark = () => root.classList.contains("dark");
     const puffAlpha = isDay ? 0.1 : 0.05;
 
     let lightningAt = performance.now() + rand(3000, 7000);
@@ -108,6 +110,7 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       ctx.clearRect(0, 0, width, height);
+      const dark = isDark();
 
       for (const puff of puffs) {
         puff.x += (dt * 0.006 * puff.z) / (reduced ? Infinity : 1);
@@ -116,7 +119,10 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
         const cy = puff.y * height;
         const r = puff.s * (0.6 + puff.z * 0.6);
         const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-        g.addColorStop(0, `rgba(255,255,255,${puffAlpha * puff.z})`);
+        g.addColorStop(
+          0,
+          `rgba(255,255,255,${(dark ? puffAlpha : puffAlpha * 3) * puff.z})`,
+        );
         g.addColorStop(1, "rgba(255,255,255,0)");
         ctx.fillStyle = g;
         ctx.beginPath();
@@ -128,7 +134,9 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
         const twinkle = reduced
           ? 0.7
           : 0.55 + 0.45 * Math.sin(now / 900 + star.p);
-        ctx.fillStyle = `rgba(255,255,255,${star.z * twinkle})`;
+        ctx.fillStyle = dark
+          ? `rgba(255,255,255,${star.z * twinkle})`
+          : `rgba(70,70,140,${star.z * twinkle * 0.5})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.s, 0, Math.PI * 2);
         ctx.fill();
@@ -145,7 +153,9 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
             drop.y = rand(-60, -10);
             drop.x = rand(0, width + 80);
           }
-          ctx.strokeStyle = `rgba(200,220,255,${0.12 + drop.z * 0.28})`;
+          ctx.strokeStyle = dark
+            ? `rgba(200,220,255,${0.12 + drop.z * 0.28})`
+            : `rgba(40,70,120,${0.1 + drop.z * 0.25})`;
           ctx.lineWidth = drop.z * 1.2;
           ctx.beginPath();
           ctx.moveTo(drop.x, drop.y);
@@ -212,8 +222,12 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
       <div
-        className="absolute inset-0 transition-[background] duration-1000"
-        style={{ background: skyGradient(sky, isDay) }}
+        className="absolute inset-0 dark:hidden"
+        style={{ background: skyGradient(sky, isDay, "light") }}
+      />
+      <div
+        className="absolute inset-0 hidden dark:block"
+        style={{ background: skyGradient(sky, isDay, "dark") }}
       />
       {isDay && sky === "clear" ? (
         <div className="absolute -top-40 right-[-10%] size-[46rem] rounded-full bg-[radial-gradient(circle,rgba(255,236,170,0.55),rgba(255,200,90,0.12)_40%,transparent_68%)]" />
@@ -227,7 +241,7 @@ export default function Sky({ sky, isDay, cloudCover }: SkyProps) {
         className="absolute inset-0 bg-indigo-100 opacity-0"
       />
       {/* soft vignette keeps text readable on bright skies */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_40%,rgba(2,6,23,0.45))]" />
+      <div className="absolute inset-0 hidden bg-[radial-gradient(ellipse_at_top,transparent_40%,rgba(2,6,23,0.45))] dark:block" />
     </div>
   );
 }

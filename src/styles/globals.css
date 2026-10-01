@@ -1,68 +1,100 @@
 @import "tailwindcss";
 
-@theme {
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
-  --color-glass: rgb(255 255 255 / 0.07);
-  --color-glass-strong: rgb(255 255 255 / 0.12);
-  --color-line: rgb(255 255 255 / 0.12);
-  --color-ink: rgb(255 255 255 / 0.96);
-  --color-ink-soft: rgb(255 255 255 / 0.68);
-  --color-ink-faint: rgb(255 255 255 / 0.45);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
 
-  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+:root {
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.52 0 0);
+  --border: oklch(0.915 0 0);
+  --ring: oklch(0.708 0 0);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.12);
+  --surface-mix: 72%;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.195 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.68 0 0);
+  --border: oklch(1 0 0 / 0.1);
+  --ring: oklch(0.556 0 0);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 12px 32px -16px rgb(0 0 0 / 0.45);
+  --surface-mix: 38%;
+}
+
+@theme {
+  --animate-rise: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(14px);
-      filter: blur(6px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
       transform: none;
-      filter: none;
     }
   }
 }
 
 @layer base {
   html {
-    color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
-    background: #0b1220;
-    color: var(--color-ink);
+    background: var(--background);
+    color: var(--foreground);
     overflow-x: clip;
   }
 
   ::selection {
-    background: rgb(255 255 255 / 0.9);
-    color: #0b1220;
+    background: var(--foreground);
+    color: var(--background);
   }
 
   :focus-visible {
-    outline: 2px solid rgb(255 255 255 / 0.8);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 }
 
-@utility glass {
-  background: var(--color-glass);
-  border: 1px solid var(--color-line);
-  backdrop-filter: blur(22px) saturate(140%);
-  -webkit-backdrop-filter: blur(22px) saturate(140%);
+/* A floating surface: cards, the brand chip, the dock. */
+@utility surface {
+  background: color-mix(in oklab, var(--card) var(--surface-mix), transparent);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 }
 
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-ink-faint);
+  color: var(--muted-foreground);
 }
 
 @utility scrollbar-none {
@@ -72,45 +104,38 @@
   }
 }
 
-/* Stagger helper: children of [data-stagger] rise in one after another. */
 [data-stagger] > * {
   animation: var(--animate-rise);
 }
 [data-stagger] > *:nth-child(2) {
-  animation-delay: 60ms;
+  animation-delay: 50ms;
 }
 [data-stagger] > *:nth-child(3) {
-  animation-delay: 120ms;
+  animation-delay: 100ms;
 }
 [data-stagger] > *:nth-child(4) {
-  animation-delay: 180ms;
+  animation-delay: 150ms;
 }
 [data-stagger] > *:nth-child(5) {
-  animation-delay: 240ms;
+  animation-delay: 200ms;
 }
 [data-stagger] > *:nth-child(6) {
-  animation-delay: 300ms;
+  animation-delay: 250ms;
 }
 [data-stagger] > *:nth-child(7) {
-  animation-delay: 360ms;
+  animation-delay: 300ms;
 }
-[data-stagger] > *:nth-child(8) {
-  animation-delay: 420ms;
-}
-[data-stagger] > *:nth-child(n + 9) {
-  animation-delay: 480ms;
+[data-stagger] > *:nth-child(n + 8) {
+  animation-delay: 350ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-stagger] > * {
+  [data-stagger] > *,
+  .animate-rise {
     animation: none;
   }
 }
 
 .maplibregl-ctrl-attrib {
   font-size: 10px;
-  background: rgb(0 0 0 / 0.4) !important;
-}
-.maplibregl-ctrl-attrib a {
-  color: rgb(255 255 255 / 0.6) !important;
 }

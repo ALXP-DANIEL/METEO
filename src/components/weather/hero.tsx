@@ -1,3 +1,4 @@
+import DecryptText from "@/components/chrome/decrypt-text";
 import { longDate, round, unitLabels } from "@/lib/format";
 import type { Forecast } from "@/lib/weather";
 import { condition, iconFor } from "@/lib/wmo";
@@ -8,40 +9,37 @@ export default function Hero({ forecast }: { forecast: Forecast }) {
   const u = unitLabels(units);
 
   return (
-    <header className="flex flex-col gap-2">
+    <header className="flex flex-col gap-1">
       <p className="eyebrow">{longDate(current.time)}</p>
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-        {place.name}
+      <h1 className="font-mono text-2xl font-semibold tracking-tight sm:text-3xl">
+        <DecryptText text={place.name.toUpperCase()} />
       </h1>
       {place.region ? (
-        <p className="-mt-1 text-sm text-ink-soft">{place.region}</p>
+        <p className="font-mono text-xs text-muted-foreground">
+          {place.region}
+        </p>
       ) : null}
 
-      <div className="mt-4 flex items-center gap-2">
-        <p className="text-[clamp(6rem,22vw,10rem)] leading-[0.8] font-extralight tracking-tighter tabular-nums">
-          {round(current.temperature)}
-          <span className="align-top text-[0.4em] font-light text-ink-soft">
-            °
-          </span>
+      <div className="mt-3 flex items-center">
+        <p className="font-mono text-[clamp(5.5rem,20vw,8.5rem)] leading-[0.85] font-semibold tracking-tighter tabular-nums">
+          <DecryptText text={`${round(current.temperature)}°`} speed={0.12} />
         </p>
         <img
           src={iconFor(current.code, current.isDay)}
           alt=""
-          width={160}
-          height={160}
-          className="-ml-4 size-32 drop-shadow-2xl sm:size-40"
+          width={150}
+          height={150}
+          className="-ml-2 size-32 sm:size-36"
         />
       </div>
 
-      <p className="text-xl font-medium">{condition(current.code).label}</p>
-      <p className="text-sm text-ink-soft tabular-nums">
-        Feels like {round(current.feelsLike)}
+      <p className="mt-1 text-lg font-medium">
+        {condition(current.code).label}
+      </p>
+      <p className="font-mono text-xs text-muted-foreground tabular-nums">
+        Feels {round(current.feelsLike)}
         {u.temp}
-        {today ? (
-          <>
-            {" · "}H {round(today.max)}° L {round(today.min)}°
-          </>
-        ) : null}
+        {today ? ` · H ${round(today.max)}° · L ${round(today.min)}°` : null}
       </p>
     </header>
   );

@@ -22,7 +22,7 @@ export default function Daily({ days, units, currentTemp }: DailyProps) {
         {days.map((day, i) => (
           <li
             key={day.date}
-            className="grid grid-cols-[3.5rem_2.5rem_2.5rem_2.25rem_1fr_2.25rem] items-center gap-2 border-t border-line py-2 first:border-t-0 sm:gap-3"
+            className="grid grid-cols-[3.5rem_2.5rem_2.5rem_2.25rem_1fr_2.25rem] items-center gap-2 border-t border-border py-2 first:border-t-0 sm:gap-3"
           >
             <span className="text-sm font-medium">{weekday(day.date, i)}</span>
             <img
@@ -32,13 +32,13 @@ export default function Daily({ days, units, currentTemp }: DailyProps) {
               height={40}
               className="size-10"
             />
-            <span className="text-[11px] font-medium text-sky-200 tabular-nums">
+            <span className="text-[11px] font-medium text-sky-600 dark:text-sky-300 tabular-nums">
               {day.precipChance >= 20 ? `${day.precipChance}%` : ""}
             </span>
-            <span className="text-right text-sm text-ink-faint tabular-nums">
+            <span className="text-right text-sm text-muted-foreground/70 tabular-nums">
               {round(day.min)}°
             </span>
-            <div className="relative h-1.5 rounded-full bg-black/25">
+            <div className="relative h-1.5 rounded-full bg-muted">
               <div
                 className="absolute inset-y-0 rounded-full"
                 style={{
@@ -49,7 +49,7 @@ export default function Daily({ days, units, currentTemp }: DailyProps) {
               />
               {i === 0 ? (
                 <div
-                  className="absolute top-1/2 size-2.5 -translate-1/2 rounded-full border-2 border-slate-900 bg-white"
+                  className="absolute top-1/2 size-2.5 -translate-1/2 rounded-full border-2 border-card bg-foreground"
                   style={{
                     left: `${Math.min(100, Math.max(0, pct(currentTemp)))}%`,
                   }}

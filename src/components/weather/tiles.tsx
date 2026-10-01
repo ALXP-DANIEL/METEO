@@ -23,7 +23,11 @@ function Big({ children }: { children: React.ReactNode }) {
 }
 
 function Note({ children }: { children: React.ReactNode }) {
-  return <p className="mt-auto text-xs leading-5 text-ink-soft">{children}</p>;
+  return (
+    <p className="mt-auto text-xs leading-5 text-muted-foreground">
+      {children}
+    </p>
+  );
 }
 
 export function WindTile({ forecast }: TileProps) {
@@ -32,11 +36,11 @@ export function WindTile({ forecast }: TileProps) {
   return (
     <Panel title="Wind" className="col-span-2">
       <div className="flex items-center gap-5">
-        <div className="relative size-36 shrink-0 rounded-full border border-line sm:size-40">
+        <div className="relative size-36 shrink-0 rounded-full border border-border sm:size-40">
           {["N", "E", "S", "W"].map((point, i) => (
             <span
               key={point}
-              className="absolute inset-0 flex justify-center pt-1.5 text-[10px] font-semibold text-ink-faint"
+              className="absolute inset-0 flex justify-center pt-1.5 text-[10px] font-semibold text-muted-foreground/70"
               style={{ rotate: `${i * 90}deg` }}
             >
               <span style={{ rotate: `${-i * 90}deg` }}>{point}</span>
@@ -50,7 +54,7 @@ export function WindTile({ forecast }: TileProps) {
               style={{ rotate: `${i * 10}deg` }}
             >
               <span
-                className={i % 9 === 0 ? "h-0" : "h-1.5 w-px bg-white/25"}
+                className={i % 9 === 0 ? "h-0" : "h-1.5 w-px bg-foreground/20"}
               />
             </span>
           ))}
@@ -60,43 +64,49 @@ export function WindTile({ forecast }: TileProps) {
             style={{ rotate: `${windDirection + 180}deg` }}
           >
             <svg viewBox="0 0 100 100" className="size-full" aria-hidden>
-              <path d="M50 4 L57 22 L50 18 L43 22 Z" fill="white" />
+              <path d="M50 4 L57 22 L50 18 L43 22 Z" fill="currentColor" />
               <line
                 x1="50"
                 y1="18"
                 x2="50"
                 y2="96"
-                stroke="white"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeOpacity="0.6"
               />
-              <circle cx="50" cy="96" r="3" fill="white" fillOpacity="0.6" />
+              <circle
+                cx="50"
+                cy="96"
+                r="3"
+                fill="currentColor"
+                fillOpacity="0.6"
+              />
             </svg>
           </div>
-          <div className="absolute inset-0 m-auto grid size-14 place-items-center rounded-full bg-slate-950/50 text-center backdrop-blur">
+          <div className="absolute inset-0 m-auto grid size-14 place-items-center rounded-full bg-card text-center backdrop-blur">
             <span className="text-lg leading-none font-semibold tabular-nums">
               {round(windSpeed)}
-              <span className="block text-[9px] font-normal text-ink-soft">
+              <span className="block text-[9px] font-normal text-muted-foreground">
                 {u.wind}
               </span>
             </span>
           </div>
         </div>
         <dl className="grid flex-1 gap-2 text-sm">
-          <div className="flex justify-between border-b border-line pb-2">
-            <dt className="text-ink-soft">Speed</dt>
+          <div className="flex justify-between border-b border-border pb-2">
+            <dt className="text-muted-foreground">Speed</dt>
             <dd className="tabular-nums">
               {round(windSpeed)} {u.wind}
             </dd>
           </div>
-          <div className="flex justify-between border-b border-line pb-2">
-            <dt className="text-ink-soft">Gusts</dt>
+          <div className="flex justify-between border-b border-border pb-2">
+            <dt className="text-muted-foreground">Gusts</dt>
             <dd className="tabular-nums">
               {round(windGusts)} {u.wind}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-ink-soft">From</dt>
+            <dt className="text-muted-foreground">From</dt>
             <dd className="tabular-nums">
               {round(windDirection)}° {compassPoint(windDirection)}
             </dd>
@@ -116,7 +126,7 @@ export function UvTile({ forecast }: TileProps) {
       <p className="-mt-2 text-sm font-medium">{uvBand(uv)}</p>
       <div className="relative mt-1 h-1.5 rounded-full bg-[linear-gradient(90deg,#4ade80,#facc15,#fb923c,#ef4444,#a855f7)]">
         <span
-          className="absolute top-1/2 size-3 -translate-1/2 rounded-full border-2 border-slate-900 bg-white"
+          className="absolute top-1/2 size-3 -translate-1/2 rounded-full border-2 border-card bg-foreground"
           style={{ left: `${Math.min(100, (uv / 11) * 100)}%` }}
         />
       </div>
@@ -141,7 +151,7 @@ export function AirTile({ forecast }: TileProps) {
           <path
             d="M10 50 A40 40 0 0 1 90 50"
             fill="none"
-            stroke="white"
+            stroke="currentColor"
             strokeOpacity="0.12"
             strokeWidth="8"
             strokeLinecap="round"
@@ -186,8 +196,8 @@ export function HumidityTile({ forecast }: TileProps) {
             key={i}
             className={
               i < humidity / 5
-                ? "flex-1 rounded-sm bg-sky-300/80"
-                : "flex-1 rounded-sm bg-white/10"
+                ? "flex-1 rounded-sm bg-foreground/80"
+                : "flex-1 rounded-sm bg-muted"
             }
             style={{ height: `${30 + i * 3.5}%` }}
           />
@@ -235,7 +245,9 @@ export function VisibilityTile({ forecast }: TileProps) {
     <Panel title="Visibility">
       <Big>
         {shown}{" "}
-        <span className="text-lg text-ink-soft">{imperial ? "mi" : "km"}</span>
+        <span className="text-lg text-muted-foreground">
+          {imperial ? "mi" : "km"}
+        </span>
       </Big>
       <Note>{note}</Note>
     </Panel>
@@ -257,19 +269,19 @@ export function PressureTile({ forecast }: TileProps) {
             className="absolute inset-0 flex justify-center"
             style={{ rotate: `${-135 + i * 10}deg` }}
           >
-            <span className="h-2 w-px bg-white/30" />
+            <span className="h-2 w-px bg-foreground/25" />
           </span>
         ))}
         <span
           className="absolute inset-0 flex justify-center"
           style={{ rotate: `${angle}deg` }}
         >
-          <span className="h-4 w-1 rounded-full bg-white" />
+          <span className="h-4 w-1 rounded-full bg-foreground" />
         </span>
         <p className="absolute inset-0 grid place-items-center text-center text-lg leading-none font-light tabular-nums">
           <span>
             {imperial ? (pressure * 0.02953).toFixed(2) : round(pressure)}
-            <span className="block text-[10px] text-ink-soft">
+            <span className="block text-[10px] text-muted-foreground">
               {imperial ? "inHg" : "hPa"}
             </span>
           </span>
@@ -301,7 +313,7 @@ export function SunTile({ forecast }: TileProps) {
     <Panel title={up ? "Sunset" : "Sunrise"} className="col-span-2">
       <div className="flex items-end justify-between gap-4">
         <Big>{clockLabel(up ? today.sunset : today.sunrise)}</Big>
-        <p className="pb-1 text-xs text-ink-soft tabular-nums">
+        <p className="pb-1 text-xs text-muted-foreground tabular-nums">
           {Math.floor(dayLength / 60)}h {dayLength % 60}m of daylight
         </p>
       </div>
@@ -318,14 +330,14 @@ export function SunTile({ forecast }: TileProps) {
           y1="50"
           x2="100"
           y2="50"
-          stroke="white"
+          stroke="currentColor"
           strokeOpacity="0.2"
           strokeWidth="0.5"
         />
         <path
           d="M10 50 Q50 -26 90 50"
           fill="none"
-          stroke="white"
+          stroke="currentColor"
           strokeOpacity="0.15"
           strokeWidth="1"
           strokeDasharray="1.5 2"
@@ -351,7 +363,7 @@ export function SunTile({ forecast }: TileProps) {
           </>
         ) : null}
       </svg>
-      <div className="flex justify-between text-xs text-ink-soft tabular-nums">
+      <div className="flex justify-between text-xs text-muted-foreground tabular-nums">
         <span>↑ {clockLabel(today.sunrise)}</span>
         <span>↓ {clockLabel(today.sunset)}</span>
       </div>
@@ -396,7 +408,7 @@ export function RainTile({ forecast }: TileProps) {
     <Panel title="Precipitation">
       <Big>
         {amount(today?.precipSum ?? 0)}{" "}
-        <span className="text-lg text-ink-soft">{u.precip}</span>
+        <span className="text-lg text-muted-foreground">{u.precip}</span>
       </Big>
       <p className="-mt-2 text-sm font-medium">Expected today</p>
       <Note>

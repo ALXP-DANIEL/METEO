@@ -9,7 +9,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <div className="grid min-h-dvh place-items-center bg-[linear-gradient(180deg,#0b1220,#1e2f4f)] px-6 text-center">
+    <div className="grid min-h-dvh place-items-center bg-background px-6 text-center">
       <div className="flex flex-col items-center gap-4">
         <img
           src="/icons/wx/not-available.svg"
@@ -18,10 +18,10 @@ export default function ErrorPage({
           height={120}
           className="size-28"
         />
-        <h1 className="text-2xl font-semibold">
+        <h1 className="font-mono text-xl font-semibold">
           The forecast didn’t come through.
         </h1>
-        <p className="max-w-sm text-sm text-ink-soft">
+        <p className="max-w-sm text-sm text-muted-foreground">
           The weather service didn’t answer in time. It’s usually back within a
           minute.
         </p>
@@ -29,11 +29,14 @@ export default function ErrorPage({
           <button
             type="button"
             onClick={reset}
-            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900"
+            className="rounded-full bg-foreground px-5 py-2 font-mono text-sm text-background"
           >
             Try again
           </button>
-          <Link href="/" className="glass rounded-full px-5 py-2 text-sm">
+          <Link
+            href="/"
+            className="surface rounded-full font-mono px-5 py-2 text-sm"
+          >
             Kuala Lumpur
           </Link>
         </div>
