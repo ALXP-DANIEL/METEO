@@ -22,7 +22,7 @@ export default function Header() {
             METEO
           </span>
           <span className="font-mono text-[11px] leading-tight text-muted-foreground">
-            The sky, decrypted
+            Live weather, anywhere
           </span>
         </span>
       </Link>

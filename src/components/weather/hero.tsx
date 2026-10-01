@@ -1,4 +1,3 @@
-import DecryptText from "@/components/chrome/decrypt-text";
 import { longDate, round, unitLabels } from "@/lib/format";
 import type { Forecast } from "@/lib/weather";
 import { condition, iconFor } from "@/lib/wmo";
@@ -12,7 +11,7 @@ export default function Hero({ forecast }: { forecast: Forecast }) {
     <header className="flex flex-col gap-1">
       <p className="eyebrow">{longDate(current.time)}</p>
       <h1 className="font-mono text-2xl font-semibold tracking-tight sm:text-3xl">
-        <DecryptText text={place.name.toUpperCase()} />
+        {place.name.toUpperCase()}
       </h1>
       {place.region ? (
         <p className="font-mono text-xs text-muted-foreground">
@@ -22,7 +21,7 @@ export default function Hero({ forecast }: { forecast: Forecast }) {
 
       <div className="mt-3 flex items-center">
         <p className="font-mono text-[clamp(5.5rem,20vw,8.5rem)] leading-[0.85] font-semibold tracking-tighter tabular-nums">
-          <DecryptText text={`${round(current.temperature)}°`} speed={0.12} />
+          {round(current.temperature)}°
         </p>
         <img
           src={iconFor(current.code, current.isDay)}

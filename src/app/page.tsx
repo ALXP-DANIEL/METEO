@@ -92,6 +92,8 @@ export default async function Home({
         sky={condition(current.code).sky}
         isDay={current.isDay}
         cloudCover={current.cloudCover}
+        windDirection={current.windDirection}
+        windSpeed={current.windSpeed}
       />
       <AutoLocate
         place={
