@@ -1,14 +1,14 @@
 {
   "slug": "meteo",
-  "title": "METEO",
+  "title": "Meteo",
   "type": "Weather App",
   "category": "Realtime Forecast",
   "summary": "Live weather for anywhere on Earth, set in a 3D sky that rains, snows, storms and clears with the real forecast.",
   "overview": "METEO was my first Next.js project, rebuilt from scratch on Next.js 16. A three.js sky behind the app renders the real weather: drifting cloud banks, rain from drizzle to downpour slanted by the actual wind, sleet, hail, snow, fog, stars and lightning. Over it sit clean black-and-white cards for a 24-hour curve, a 10-day outlook, wind, sun, UV, air quality, humidity, pressure, moon and an animated rain radar. It runs on free, keyless data from Open-Meteo and RainViewer.",
   "year": "2026",
   "spotlight": true,
-  "thumbnail": "./metadata/picture/thumbnail.jpeg",
-  "spotlightImage": "./metadata/picture/spotlight.jpeg",
+  "thumbnail": "./metadata/picture/cover-thumbnail.jpeg",
+  "spotlightImage": "./metadata/picture/cover-spotlight.jpeg",
   "techStack": [
     "Next.js 16",
     "React 19",
@@ -21,7 +21,7 @@
   "highlights": [
     "3D weather backdrop in three.js: clouds, rain by intensity, sleet, hail, snow, fog, stars and lightning, all moved by the real wind.",
     "First-visit splash that draws the logo, then a staggered entrance with a temperature count-up.",
-    "⌘K city search, one-tap geolocation, °C/°F and a 'surprise me' tour of extreme climates.",
+    "\u2318K city search, one-tap geolocation, \u00b0C/\u00b0F and a 'surprise me' tour of extreme climates.",
     "Animated RainViewer radar that follows the selected place, plus per-place Open Graph share cards."
   ],
   "previewImages": [
@@ -46,12 +46,14 @@
     {
       "src": "./metadata/picture/backdrop.jpeg",
       "title": "Weather backdrop",
-      "caption": "Generated atmospheric artwork inspired by METEO’s changing skies.",
+      "caption": "Generated atmospheric artwork inspired by METEO\u2019s changing skies.",
       "alt": "Silver daylight clouds blending into a dark rainy sky"
     }
   ],
   "actions": {
     "open": "https://meteo.alifdaniel.dpdns.org",
     "github": "https://github.com/ALXP-DANIEL/METEO"
-  }
+  },
+  "profileImage": "./metadata/picture/profile-cover-v2.jpeg",
+  "profileSummary": "A forecast with atmosphere."
 }
